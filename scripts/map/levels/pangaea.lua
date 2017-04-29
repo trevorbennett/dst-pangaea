@@ -1,5 +1,6 @@
 local require=GLOBAL.require
 
+require("map/network")
 require("map/terrain")
 require("map/rooms/forest")
 
@@ -14,6 +15,23 @@ for i,v in ipairs(roomList) do
 end
 
 local function addConnectedTag(room)
-    print("Banana " + room)
+    print("PangaeaRoom: ", room)
     table.insert(room.tags, FORCE_CONNECTED)
+end
+
+local function Graph:ApplyPoisonTag()
+	local nodes = self:GetNodes(true)
+	for k,node in pairs(nodes) do
+		if IsNodeTagged(node, "ForceDisconnected") then --or string.find(node.id, "LOOP_BLANK_SUB")~=nil then
+			WorldSim:ClearNodeLinks(node.id)
+			WorldSim:SetNodeType(node.id, 1) -- BLANK
+  	else
+  		local flags = 0x000002
+  		WorldSim:SetSiteFlags(node.id, flags)
+    end
+	end
+	local children = self:GetChildren()
+	for k,child in pairs(children) do
+		child:ApplyPoisonTag()
+	end
 end
