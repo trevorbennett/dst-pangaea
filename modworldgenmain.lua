@@ -1,3 +1,5 @@
-GLOBAL.require("map/tasks")
-GLOBAL.require("map/rooms")
-GLOBAL.require("map/levels")
+local require=GLOBAL.require
+
+require("map/tasks")
+require("map/rooms")
+require("map/levels")
